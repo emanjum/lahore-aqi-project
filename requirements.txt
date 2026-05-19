@@ -6,3 +6,5 @@ plotly
 xgboost
 scikit-learn
 pymongo
+certifi
+joblib

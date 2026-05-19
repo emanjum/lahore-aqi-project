@@ -4,6 +4,7 @@ import requests
 import pandas as pd
 import streamlit as st
 from datetime import datetime, timedelta
+from mongodb_utils import save_dataframe_to_mongodb
 
 
 LAT = 31.5204
@@ -56,6 +57,11 @@ os.makedirs("data", exist_ok=True)
 file_path = "data/raw_aqi_data.csv"
 df.to_csv(file_path, index=False)
 
+print("Historical data saved successfully!")
+print("Rows saved:", len(df))
+print(df.head())
+df.to_csv(file_path, index=False)
+save_dataframe_to_mongodb(df, "raw_aqi_data")
 print("Historical data saved successfully!")
 print("Rows saved:", len(df))
 print(df.head())
