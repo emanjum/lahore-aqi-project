@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import streamlit as st
 import certifi
@@ -5,7 +6,13 @@ from pymongo import MongoClient, UpdateOne
 
 
 def get_mongo_client():
-    uri = st.secrets["MONGODB_URI"]
+    # GitHub Actions / local terminal uses environment variable
+    uri = os.getenv("MONGODB_URI")
+
+    # Streamlit Cloud uses st.secrets
+    if not uri:
+        uri = st.secrets["MONGODB_URI"]
+
     client = MongoClient(uri, tlsCAFile=certifi.where())
     return client
 
@@ -14,6 +21,7 @@ def get_database():
     client = get_mongo_client()
     return client["aqi_project"]
 
+
 def save_dataframe_to_mongodb(df, collection_name):
     db = get_database()
     collection = db[collection_name]
@@ -21,17 +29,15 @@ def save_dataframe_to_mongodb(df, collection_name):
     records = df.to_dict("records")
 
     operations = []
-    for i, record in enumerate(records):
 
-        # Use timestamp if available
+    for i, record in enumerate(records):
         if "timestamp" in record:
             filter_query = {"timestamp": str(record["timestamp"])}
+            record["timestamp"] = str(record["timestamp"])
 
-        # Otherwise use model_name if available
         elif "model_name" in record:
             filter_query = {"model_name": record["model_name"]}
 
-        # Otherwise use row index
         else:
             filter_query = {"row_id": i}
 
