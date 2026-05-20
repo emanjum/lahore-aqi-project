@@ -5,6 +5,10 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
 
+# Optional: removes Node.js 20 deprecation warning
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   run-daily-training:
     runs-on: ubuntu-latest
@@ -27,7 +31,10 @@ jobs:
           cat > .streamlit/secrets.toml << EOF
           OPENWEATHERMAP_API_KEY = "${{ secrets.OPENWEATHERMAP_API_KEY }}"
           HOPSWORKS_API_KEY = "${{ secrets.HOPSWORKS_API_KEY }}"
+          MONGODB_URI = "${{ secrets.MONGODB_URI }}"
           EOF
 
       - name: Run daily training pipeline
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
         run: python daily_training_pipeline.py
