@@ -2,7 +2,7 @@
 
 ## 🚀 Live Demo
 
-https://lahore-aqi-project-et3jiapxuaflm7cabd29jt.streamlit.app
+https://lahore-aqi-project-et3ijapxuaflm7cabd29jt.streamlit.app
 
 # Lahore AQI Prediction Project
 
