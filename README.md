@@ -40,12 +40,42 @@ A cloud-based machine learning system for monitoring and forecasting Lahore's Ai
 7. Save predictions to MongoDB
 8. Visualize results in Streamlit
 
+
+
+## Architecture
+
+The project uses MongoDB Atlas as a cloud-based Feature Store and Data Store.
+
+### Data Flow
+
+OpenWeather API
+→ MongoDB Atlas (`raw_aqi_data`)
+→ Feature Engineering Pipeline
+→ MongoDB Atlas (`features`)
+→ Model Training Pipeline
+→ MongoDB Atlas (`model_metrics`)
+→ Prediction Pipeline
+→ MongoDB Atlas (`predictions`)
+→ Streamlit Dashboard
+
+### MongoDB Collections
+
+* `raw_aqi_data` – Stores historical AQI and pollutant measurements.
+* `features` – Stores engineered features such as lag features, time-based features, and prediction targets.
+* `model_metrics` – Stores model evaluation results (MAE, RMSE, R²).
+* `predictions` – Stores the latest 3-day AQI forecast.
+
+MongoDB Atlas serves as the project's cloud-based feature store, replacing the need for local CSV-based storage.
+
+
 ## Best Model
 The system automatically selects the best model each day based on Mean Absolute Error (MAE).
 
 ## Automation
 - Hourly Pipeline: Updates raw data and features
 - Daily Pipeline: Retrains models and generates forecasts
+
+
 
 ## Repository
 https://github.com/emanjum/lahore-aqi-project
