@@ -82,3 +82,11 @@ def read_collection_as_dataframe(collection_name):
         df = df.sort_values("timestamp").reset_index(drop=True)
 
     return df
+
+
+# Delete all records from a MongoDB collection
+def clear_collection(collection_name):
+    db = get_database()
+    collection = db[collection_name]
+    collection.delete_many({})
+    print(f"Cleared MongoDB collection: {collection_name}")
